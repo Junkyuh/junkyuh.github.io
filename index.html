@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- 전화/이메일/주소 자동링크 비활성화 -->
-  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  <!-- 기본 메타 -->
+  <meta name="description" content="수북수북 | Subook Subook">
+  <link rel="canonical" href="https://sub00k.com/">
+
+  <!-- Open Graph (카카오톡/페이스북/아이메시지 미리보기) -->
+  <meta property="og:title" content="수북수북 | Subook Subook">
+  <meta property="og:description" content="수북수북 | Subook Subook">
+  <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png">
+  <meta property="og:url" content="https://sub00k.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="수북수북">
+
+  
+
+  <!-- 파비콘/터치아이콘 -->
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png">
+  <meta name="theme-color" content="#0f1012">
   <title>수북수북 | SubookSubook</title>
-
-  <!-- 검색엔진 노출 차단 -->
-  <meta name="robots" content="noindex, nofollow" />
-
-  <!-- 보안 메타(정적 페이지 최적값) -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self';
-                 img-src 'self' data: blob: https://upload.wikimedia.org https://cdn.jsdelivr.net;
-                 style-src 'self' 'unsafe-inline';
-                 script-src 'none';
-                 base-uri 'none';
-                 form-action 'none';
-                 frame-ancestors 'none';
-                 upgrade-insecure-requests">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta name="color-scheme" content="dark light">
 
   <style>
     /* ====== 색/타이포 기본 ====== */
@@ -69,20 +69,26 @@
     }
 
     /* 아이콘 나열 */
-    .logos{ display:grid; gap:52px; justify-items:center; margin-top:72px; }
+    .logos{ display:grid; gap:64px; justify-items:center; margin-top:72px; }
     .logos a, .logos div{ display:inline-grid; place-items:center }
+    .logos a{
+      min-width: 52px;
+      min-height: 52px;
+      padding: 10px;
+      border-radius: 12px;
+    }
     /* Instagram 전용: 커서/클릭 영역 개선 */
     .logos a.insta{
       cursor: pointer;            /* 손가락 커서 */
-      min-width: 44px;            /* 접근성 권장 최소 터치 영역 */
-      min-height: 44px;
-      padding: 8px;               /* 아이콘 주변 여유 */
+      min-width: 52px;            /* 접근성 권장 최소 터치 영역 */
+      min-height: 52px;
+      padding: 10px;               /* 아이콘 주변 여유 */
       border-radius: 12px;        /* 보이지 않는 클릭 영역 모서리 둥글게 */
     }
 
     /* 기본 아이콘(에어비앤비/인스타) */
     .icon{
-      height:38px; width:auto; display:block;
+      height:46px; width:auto; display:block;
       filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
       transition: transform .14s ease, filter .14s ease;
     }
@@ -126,11 +132,14 @@
     }
 
     footer{
-      padding:52px 20px 56px; text-align:center; color:#b9b9b9; /* 밝게 */
+      padding:52px 20px 72px; text-align:center; color:#b9b9b9; /* 밝게 */
       font-size:13px; line-height:1.9
     }
     footer strong{color:#d7d7d7; font-weight:600}
     .copy{margin-top:10px; color:#9a9a9a; letter-spacing:.02em}
+    @media (max-width: 600px){
+      footer{ padding-bottom: 84px; }
+    }
   </style>
 </head>
 <body>
