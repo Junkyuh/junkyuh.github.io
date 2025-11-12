@@ -45,11 +45,11 @@
     body::before{
       content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
       background:
-        radial-gradient(1200px 900px at 50% 45%, rgba(255,183,197,.10), rgba(0,0,0,0) 60%),
-        radial-gradient(1000px 800px at 52% 48%, rgba(164,206,255,.12), rgba(0,0,0,0) 62%),
-        radial-gradient(1100px 850px at 48% 53%, rgba(255,237,188,.10), rgba(0,0,0,0) 65%),
-        radial-gradient(1400px 1000px at 50% 50%, rgba(255,255,255,.06), rgba(0,0,0,0) 68%),
-        radial-gradient(85% 85% at 50% 50%, rgba(0,0,0,.00) 0%, rgba(0,0,0,.25) 65%, rgba(0,0,0,.65) 100%);
+        radial-gradient(1200px 900px at 50% 45%, rgba(255,183,197,.12), rgba(0,0,0,0) 60%),
+        radial-gradient(1000px 800px at 52% 48%, rgba(164,206,255,.14), rgba(0,0,0,0) 62%),
+        radial-gradient(1100px 850px at 48% 53%, rgba(255,237,188,.12), rgba(0,0,0,0) 65%),
+        radial-gradient(1400px 1000px at 50% 50%, rgba(255,255,255,.10), rgba(0,0,0,0) 68%),
+        radial-gradient(85% 85% at 50% 50%, rgba(0,0,0,.00) 0%, rgba(0,0,0,.18) 65%, rgba(0,0,0,.45) 100%);
       filter: saturate(120%) blur(0.2px);
     }
 
@@ -69,7 +69,54 @@
     }
 
     /* 아이콘 나열 */
-    .logos{ display:grid; gap:64px; justify-items:center; margin-top:72px; }
+    .logos {
+      display: grid;
+      gap: 48px;
+      justify-items: center;
+      margin-top: 72px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (min-width: 900px) {
+      .logos {
+        /* 5열 그리드: 1행(에어비앤비, 네이버), 2행(인스타, 로고, 리브애니웨어) */
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-areas:
+          ". airbnb . naver ."
+          "insta . logo . live";
+        column-gap: 56px;   /* 데스크탑에서 간격 살짝 좁힘 */
+        row-gap: 46px;
+        justify-items: center;
+        max-width: 720px;   /* 5열에 맞춰 전체 폭 확장 */
+      }
+
+      /* 각 아이템을 영역에 매핑 */
+      .logos a[href*="airbnb"] { grid-area: airbnb; justify-self: center; }
+      .logos a[href*="naver"]  { grid-area: naver;  justify-self: center; }
+      .logos a.insta            { grid-area: insta;  justify-self: center; }
+      .logos .chip             { grid-area: logo;   justify-self: center; }
+      .logos a.live            { grid-area: live;   justify-self: center; }
+    }
+
+    /* 모바일(세로)일 때: 2열 x 3행, 로고를 3행 가운데 배치 */
+    @media (max-width: 899.98px) {
+      .logos {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        grid-template-areas:
+          "airbnb naver"
+          "insta  live"
+          "logo   logo";
+        row-gap: 40px;
+        justify-items: center;
+      }
+      .logos a[href*="airbnb"] { grid-area: airbnb; }
+      .logos a[href*="naver"]  { grid-area: naver;  }
+      .logos a.insta            { grid-area: insta;  }
+      .logos .chip              { grid-area: logo;   grid-column: 1 / -1; justify-self: center; }
+      .logos a.live             { grid-area: live;   }
+    }
     .logos a, .logos div{ display:inline-grid; place-items:center }
     .logos a{
       min-width: 52px;
@@ -141,6 +188,23 @@
     /* iOS 사파리 등에서 전화번호 자동 링크 무력화 (혹시 생기면) */
     footer a[href^="tel:"]{ pointer-events:none; color:inherit; text-decoration:none }
     .plain-num{ white-space:nowrap; }
+    /* Live Anywhere: 흰 배경을 배경색에 녹여서 없앤 듯 보이게 */
+    .logos a.live {
+      padding: 6px 8px;
+      border-radius: 12px;
+      box-shadow: none;
+    }
+
+    .logos a.live .icon{
+      height: 46px;                 /* 데스크탑에서 더 선명하게 (인스타/네이버와 맞춤) */
+      mix-blend-mode: normal;       /* 배경에 섞지 않음(더 밝게 보이도록) */
+      filter: contrast(1.35) saturate(1.45) brightness(1.22) drop-shadow(0 8px 22px rgba(0,0,0,.25));
+    }
+
+    /* 모바일에서는 더 크게 */
+    @media (max-width: 899.98px){
+      .logos a.live .icon{ height: 46px; }
+    }
   </style>
 </head>
 <body>
@@ -157,6 +221,16 @@
         <!-- Airbnb -->
         <a href="https://airbnb.co.kr/h/subook" target="_blank" rel="noopener noreferrer" aria-label="Airbnb로 이동">
           <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg" alt="Airbnb">
+        </a>
+
+        <!-- Naver 예약 -->
+        <a href="https://booking.naver.com/booking/3/bizes/1537541" target="_blank" rel="noopener noreferrer" aria-label="Naver 예약으로 이동">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/Naver_icon_2018.svg" alt="Naver 예약">
+        </a>
+
+        <!-- LiveAnywhere -->
+        <a class="live" href="https://www.liveanywhere.me/accommodations/45342?web-mode=true" target="_blank" rel="noopener noreferrer" aria-label="리브애니웨어로 이동">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/LiveAnywhere.png" alt="Live Anywhere" loading="lazy" decoding="async">
         </a>
 
         <!-- 수북수북 로고 (깃허브 CDN) -->
