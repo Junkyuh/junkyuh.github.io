@@ -205,7 +205,115 @@
     @media (max-width: 899.98px){
       .logos a.live .icon{ height: 46px; }
     }
-  </style>
+
+    /* ====== 수북수북 갤러리 오버레이 ====== */
+    #gallery {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;               /* 기본은 숨김 */
+      padding: 80px 20px 40px;
+      background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.06), rgba(0,0,0,0.92));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow-y: auto;
+    }
+    #gallery:target {
+      display: block;              /* 수북수북 로고 클릭 시(#gallery 타깃) 보이기 */
+    }
+    #gallery-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    #gallery-close {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      margin-bottom: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.35);
+      font-size: 13px;
+      color: #e8e8e8;
+      text-decoration: none;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    #gallery-close span {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    .gallery-grid {
+      /* 컬럼 기반 Masonry 레이아웃 */
+      column-count: 3;
+      column-gap: 16px;
+    }
+    .gallery-grid > div {
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      margin-bottom: 16px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.6);
+    }
+    @media (max-width: 900px) {
+      #gallery {
+        padding-top: 64px;
+      }
+      .gallery-grid {
+        column-count: 2;
+        column-gap: 12px;
+      }
+      .gallery-grid > div {
+        margin-bottom: 12px;
+      }
+    }
+
+    /* ====== 갤러리 이미지 확대 라이트박스 ====== */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.84);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #lightbox.show {
+      display: flex;
+    }
+    #lightbox-img {
+      max-width: min(96vw, 1200px);
+      max-height: 90vh;
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.85);
+    }
+    #lightbox-close {
+      position: absolute;
+      top: 26px;
+      right: 26px;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      background: rgba(0,0,0,0.65);
+      color: #f5f5f5;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    #lightbox-close:hover {
+      background: rgba(0,0,0,0.8);
+    }
+</style>
 </head>
 <body>
   <main class="wrap">
@@ -234,21 +342,167 @@
         </a>
 
         <!-- 수북수북 로고 (깃허브 CDN) -->
-        <div class="chip" title="수북수북">
+        <a href="#gallery" class="chip" title="수북수북">
           <img
             class="brand-logo"
             src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png"
             alt="SubookSubook logo" loading="lazy" decoding="async">
-        </div>
+        </a>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div><strong>상호명</strong> 수북수북</div>
-    <div><strong>대표자명</strong> 최준혁</div>
-    <div><strong>사업자 등록번호</strong> <span class="plain-num">484&#8203;-34&#8203;-01667</span></div>
-    <div class="copy">© 2025 subooksubook. all rights reserved.</div>
-  </footer>
-</body>
-</html>
+      <!-- 수북수북 갤러리 오버레이 (로고 클릭 시 표시) -->
+      <section id="gallery" aria-label="수북수북 갤러리">
+        <div id="gallery-inner">
+          <a id="gallery-close" href="#" aria-label="갤러리 닫기">
+            ✕ 갤러리 닫기
+          </a>
+          <div class="gallery-grid" id="gallery-grid"></div>
+        </div>
+      </section>
+
+      <!-- 갤러리 이미지 확대용 라이트박스 -->
+      <div id="lightbox" aria-hidden="true">
+        <button id="lightbox-close" type="button" aria-label="이미지 닫기">✕ 닫기</button>
+        <img id="lightbox-img" src="" alt="">
+      </div>
+
+    <script>
+      // ====== 갤러리 이미지 확대 라이트박스 ======
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxClose = document.getElementById("lightbox-close");
+
+      function openLightbox(src, alt) {
+        if (!lightbox || !lightboxImg) return;
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || "";
+        lightbox.classList.add("show");
+        document.body.style.overflow = "hidden"; // 배경 스크롤 잠금
+      }
+
+      function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove("show");
+        lightboxImg.src = "";
+        document.body.style.overflow = "";
+      }
+
+      if (lightbox) {
+        lightbox.addEventListener("click", (e) => {
+          // 배경을 클릭했을 때만 닫기 (이미지 클릭은 무시)
+          if (e.target === lightbox) {
+            closeLightbox();
+          }
+        });
+      }
+
+      if (lightboxClose) {
+        lightboxClose.addEventListener("click", (e) => {
+          e.preventDefault();
+          closeLightbox();
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeLightbox();
+        }
+      });
+
+      // ====== 수북수북 갤러리 이미지 자동 생성 (원본 이름 + "-편집" 둘 다 대응) ======
+      (function () {
+        const base = "https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/";
+        const grid = document.getElementById("gallery-grid");
+        if (!grid) return;
+
+        // 파일 아이디 리스트 구성
+        const ids = [];
+
+        // SDP01298 ~ SDP01406
+        for (let n = 1298; n <= 1406; n++) {
+          ids.push(`SDP0${n}`);
+        }
+
+        // 드론 사진 4장
+        ids.push(
+          "DJI_20251114143734_0533_D",
+          "DJI_20251114143838_0537_D",
+          "DJI_20251114143859_0538_D",
+          "DJI_20251114144003_0542_D"
+        );
+
+        let batchSize = 30;     // 한 번에 불러올 이미지 수
+        let currentIndex = 0;   // 현재 어디까지 불러왔는지
+
+        const loadMoreBtn = document.createElement("button");
+        loadMoreBtn.textContent = "더 보기";
+        loadMoreBtn.style.display = "block";
+        loadMoreBtn.style.margin = "26px auto 40px";
+        loadMoreBtn.style.padding = "12px 22px";
+        loadMoreBtn.style.border = "1px solid rgba(255,255,255,0.32)";
+        loadMoreBtn.style.background = "rgba(0,0,0,0.45)";
+        loadMoreBtn.style.color = "#e8e8e8";
+        loadMoreBtn.style.borderRadius = "999px";
+        loadMoreBtn.style.fontSize = "14px";
+        loadMoreBtn.style.cursor = "pointer";
+
+        function loadBatch() {
+          const slice = ids.slice(currentIndex, currentIndex + batchSize);
+
+          slice.forEach((id, idx) => {
+            const wrapper = document.createElement("div");
+            wrapper.style.borderRadius = "18px";
+            wrapper.style.overflow = "hidden";
+            wrapper.style.boxShadow = "0 18px 48px rgba(0,0,0,0.7)";
+
+            const img = document.createElement("img");
+            img.alt = `수북수북 사진`;
+            img.loading = "lazy";
+            img.decoding = "async";
+            img.style.display = "block";
+            img.style.width = "100%";
+
+            let stage = 0;
+            img.src = base + id + ".webp";
+
+            img.addEventListener("error", () => {
+              stage++;
+              if (stage === 1) {
+                img.src = base + id + "-편집.webp";
+              } else {
+                wrapper.remove();
+              }
+            });
+
+            img.addEventListener("click", () => {
+              openLightbox(img.src, img.alt);
+            });
+
+            wrapper.appendChild(img);
+            grid.appendChild(wrapper);
+          });
+
+          currentIndex += slice.length;
+
+          if (currentIndex >= ids.length) {
+            loadMoreBtn.style.display = "none";
+          }
+        }
+
+        loadMoreBtn.addEventListener("click", loadBatch);
+
+        grid.parentNode.appendChild(loadMoreBtn);
+
+        loadBatch();
+      })();
+    </script>
+      <footer>
+        <div><strong>상호명</strong> 수북수북</div>
+        <div><strong>대표자명</strong> 최준혁</div>
+        <div><strong>사업자 등록번호</strong> <span class="plain-num">484&#8203;-34&#8203;-01667</span></div>
+        <div class="copy">© 2025 subooksubook. all rights reserved.</div>
+      </footer>
+    </body>
+  </html>
