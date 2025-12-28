@@ -2,507 +2,373 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- iOS 자동 링크/재포맷 방지 -->
-  <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-  <!-- 기본 메타 -->
-  <meta name="description" content="수북수북 | Subook Subook">
-  <link rel="canonical" href="https://sub00k.com/">
-
-  <!-- Open Graph (카카오톡/페이스북/아이메시지 미리보기) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="옥천의 고요한 쉼터, 수북수북">
   <meta property="og:title" content="수북수북 | Subook Subook">
-  <meta property="og:description" content="수북수북 | Subook Subook">
   <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png">
-  <meta property="og:url" content="https://sub00k.com/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="수북수북">
-
-  <!-- 파비콘/터치아이콘 -->
-  <link rel="icon" href="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png" type="image/png">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png">
-  <meta name="theme-color" content="#0f1012">
   <title>수북수북 | SubookSubook</title>
 
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500&display=swap" rel="stylesheet">
+
   <style>
-    /* ====== 색/타이포 기본 ====== */
-    :root{
-      --bg:#0f1012;            /* 거의 블랙에 가까운 그레이 */
-      --fg:#e8e8e8;            /* 본문 텍스트 */
-      --muted:#9a9a9a;         /* 보조 텍스트 */
+    /* === 초기화 및 변수 === */
+    :root {
+      --primary: #f5f5f7;
+      --glass: rgba(20, 20, 20, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --accent: #d4b886;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-
-    /* ====== 글로벌 백그라운드(오라 + 비네팅) ====== */
-    body{
-      display:flex; flex-direction:column; min-height:100vh;
-      color:var(--fg);
-      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;
-      background: var(--bg);
-      -webkit-text-size-adjust:100%;
-    }
-    /* 화면 전체에 아주 은은한 오라 및 비네트 레이어 */
-    body::before{
-      content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
-      background:
-        radial-gradient(1200px 900px at 50% 45%, rgba(255,183,197,.12), rgba(0,0,0,0) 60%),
-        radial-gradient(1000px 800px at 52% 48%, rgba(164,206,255,.14), rgba(0,0,0,0) 62%),
-        radial-gradient(1100px 850px at 48% 53%, rgba(255,237,188,.12), rgba(0,0,0,0) 65%),
-        radial-gradient(1400px 1000px at 50% 50%, rgba(255,255,255,.10), rgba(0,0,0,0) 68%),
-        radial-gradient(85% 85% at 50% 50%, rgba(0,0,0,.00) 0%, rgba(0,0,0,.18) 65%, rgba(0,0,0,.45) 100%);
-      filter: saturate(120%) blur(0.2px);
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: "Pretendard", sans-serif;
+      color: var(--primary);
+      background-color: #0f1012;
+      overflow-x: hidden;
     }
 
-    .wrap{flex:1; display:flex; align-items:center; justify-content:center; padding:64px 20px}
-    .panel{width:100%; max-width:720px; margin:0 auto; text-align:center}
+    /* === 배경화면 (드론샷 활용) === */
+    .bg-layer {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      z-index: -1;
+      /* 네가 가진 드론 사진 중 가장 멋진 것 */
+      background-image: url('https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/DJI_20251114143734_0533_D.webp');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.5); /* 글씨가 잘 보이게 어둡기 조절 */
+      transform: scale(1.05);
+      animation: slowZoom 20s infinite alternate;
+    }
+    @keyframes slowZoom { from { transform: scale(1.0); } to { transform: scale(1.1); } }
 
-    /* 상단 브랜드(가독성 업) */
-    .brand {
-      margin-bottom: 32px;
-      font-size: clamp(26px, 4.6vw, 34px);
-      letter-spacing: .02em;
-      color: #f5f5f5; /* 더 밝은 색상 */
-      text-shadow:
-        0 0 8px rgba(255, 255, 255, 0.40),
-        0 0 16px rgba(200, 180, 255, 0.25),
-        0 1px 2px rgba(0, 0, 0, 0.40);
+    /* === 메인 컨테이너 === */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
     }
 
-    /* 아이콘 나열 */
-    .logos {
+    /* 로고 영역 */
+    .logo-area {
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.2s;
+    }
+    .logo-img {
+      width: 110px;
+      height: auto;
+      filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+    }
+
+    /* 타이포그래피 (문구 삭제됨) */
+    .title-area {
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.4s;
+    }
+    h1 {
+      font-family: 'Noto Serif KR', serif; /* 명조체 */
+      font-size: clamp(30px, 6vw, 46px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #f5f5f5;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* === 링크 카드 (글래스모피즘) === */
+    .links-grid {
       display: grid;
-      gap: 48px;
-      justify-items: center;
-      margin-top: 72px;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    @media (min-width: 900px) {
-      .logos {
-        /* 5열 그리드: 1행(에어비앤비, 네이버), 2행(인스타, 로고, 리브애니웨어) */
-        grid-template-columns: repeat(5, 1fr);
-        grid-template-areas:
-          ". airbnb . naver ."
-          "insta . logo . live";
-        column-gap: 56px;   /* 데스크탑에서 간격 살짝 좁힘 */
-        row-gap: 46px;
-        justify-items: center;
-        max-width: 720px;   /* 5열에 맞춰 전체 폭 확장 */
-      }
-
-      /* 각 아이템을 영역에 매핑 */
-      .logos a[href*="airbnb"] { grid-area: airbnb; justify-self: center; }
-      .logos a[href*="naver"]  { grid-area: naver;  justify-self: center; }
-      .logos a.insta            { grid-area: insta;  justify-self: center; }
-      .logos .chip             { grid-area: logo;   justify-self: center; }
-      .logos a.live            { grid-area: live;   justify-self: center; }
+      grid-template-columns: 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 400px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.6s;
     }
 
-    /* 모바일(세로)일 때: 2열 x 3행, 로고를 3행 가운데 배치 */
-    @media (max-width: 899.98px) {
-      .logos {
-        grid-template-columns: repeat(2, minmax(120px, 1fr));
-        grid-template-areas:
-          "airbnb naver"
-          "insta  live"
-          "logo   logo";
-        row-gap: 40px;
-        justify-items: center;
-      }
-      .logos a[href*="airbnb"] { grid-area: airbnb; }
-      .logos a[href*="naver"]  { grid-area: naver;  }
-      .logos a.insta            { grid-area: insta;  }
-      .logos .chip              { grid-area: logo;   grid-column: 1 / -1; justify-self: center; }
-      .logos a.live             { grid-area: live;   }
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    .logos a, .logos div{ display:inline-grid; place-items:center }
-    .logos a{
-      min-width: 52px;
-      min-height: 52px;
-      padding: 10px;
-      border-radius: 12px;
+    .link-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.3);
     }
-    /* Instagram 전용: 커서/클릭 영역 개선 */
-    .logos a.insta{
-      cursor: pointer;            /* 손가락 커서 */
-      min-width: 52px;            /* 접근성 권장 최소 터치 영역 */
-      min-height: 52px;
-      padding: 10px;              /* 아이콘 주변 여유 */
-      border-radius: 12px;        /* 보이지 않는 클릭 영역 모서리 둥글게 */
+    .link-info { display: flex; align-items: center; gap: 14px; }
+    .link-icon { width: 24px; height: 24px; object-fit: contain; opacity: 0.9; }
+    .link-text { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
+    .link-arrow { font-size: 14px; opacity: 0.5; }
+
+    /* 예약 강조 스타일 */
+    .link-card.primary {
+      background: rgba(255, 255, 255, 0.9);
+      color: #111;
+    }
+    .link-card.primary:hover { background: #fff; transform: scale(1.02); }
+    .link-card.primary .link-arrow { opacity: 1; color: #111; }
+
+    /* === 갤러리 진입 버튼 === */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 13px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .scroll-hint::after {
+      content: "";
+      width: 1px;
+      height: 30px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
     }
 
-    /* 기본 아이콘(에어비앤비/인스타) */
-    .icon{
-      height:46px; width:auto; display:block;
-      filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
-      transition: transform .14s ease, filter .14s ease;
-    }
-    .logos a:hover .icon{
-      transform: translateY(-1px);
-      filter: drop-shadow(0 8px 18px rgba(0,0,0,.22));
-    }
-
-    /* ====== 수북수북 로고 + M1 감성 오라 ====== */
-    .chip{ position:relative; display:inline-grid; place-items:center; padding:8px; border-radius:24px; isolation:isolate }
-    .brand-logo{
-      height:120px; width:auto; display:block;
-      filter:
-        drop-shadow(0 22px 46px rgba(0,0,0,.20))
-        drop-shadow(0 0 36px rgba(255,255,255,.50));
-    }
-    /* 바깥쪽 회전 오라 */
-    .chip::before{
-      content:""; position:absolute; inset:-44px; border-radius:32px; z-index:-1;
-      background:
-        conic-gradient(from 30deg at 50% 50%,
-          #ffd9bf 0%,  #ffc2d6 14%,  #c9b9ff 32%,
-          #a8d7ff 52%, #b8ffd8 72%, #ffd9bf 100%);
-      filter: blur(46px) saturate(125%);
-      opacity:.46;
-      animation: spinAmbient 24s linear infinite;
-    }
-    /* 안쪽 소프트 글로우 */
-    .chip::after{
-      content:""; position:absolute; inset:-10px; border-radius:20px; z-index:-1;
-      background: radial-gradient(circle at 50% 55%, rgba(255,255,255,.70), transparent 64%);
-      filter: blur(12px);
-      opacity:.82;
-    }
-    @media (prefers-reduced-motion: reduce){ .chip::before{ animation:none } }
-    @keyframes spinAmbient { to { transform: rotate(360deg) } }
-
-    @media (max-width: 600px){
-      .brand-logo{ height: clamp(84px, 26vw, 130px) }
-      .wrap{ padding: 40px 16px }
-    }
-
-    footer{
-      padding:52px 20px 84px; text-align:center; color:#b9b9b9; /* 밝게 */
-      font-size:13px; line-height:1.9
-    }
-    footer strong{color:#d7d7d7; font-weight:600}
-    .copy{margin-top:10px; color:#9a9a9a; letter-spacing:.02em}
-
-    /* iOS 사파리 등에서 전화번호 자동 링크 무력화 (혹시 생기면) */
-    footer a[href^="tel:"]{ pointer-events:none; color:inherit; text-decoration:none }
-    .plain-num{ white-space:nowrap; }
-    /* Live Anywhere: 흰 배경을 배경색에 녹여서 없앤 듯 보이게 */
-    .logos a.live {
-      padding: 6px 8px;
-      border-radius: 12px;
-      box-shadow: none;
-    }
-
-    .logos a.live .icon{
-      height: 46px;                 /* 데스크탑에서 더 선명하게 (인스타/네이버와 맞춤) */
-      mix-blend-mode: normal;       /* 배경에 섞지 않음(더 밝게 보이도록) */
-      filter: contrast(1.35) saturate(1.45) brightness(1.22) drop-shadow(0 8px 22px rgba(0,0,0,.25));
-    }
-
-    /* 모바일에서는 더 크게 */
-    @media (max-width: 899.98px){
-      .logos a.live .icon{ height: 46px; }
-    }
-
-    /* ====== 수북수북 갤러리 오버레이 ====== */
-    #gallery {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: none;               /* 기본은 숨김 */
+    /* === 갤러리 섹션 === */
+    #gallery-section {
+      position: relative;
+      background: #0f1012;
       padding: 80px 20px 40px;
-      background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.06), rgba(0,0,0,0.92));
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      overflow-y: auto;
+      min-height: 100vh;
+      z-index: 2;
     }
-    #gallery:target {
-      display: block;              /* 수북수북 로고 클릭 시(#gallery 타깃) 보이기 */
+    .section-title {
+      text-align: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 24px;
+      margin-bottom: 40px;
+      color: rgba(255,255,255,0.9);
     }
-    #gallery-inner {
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
       max-width: 1000px;
       margin: 0 auto;
     }
-    #gallery-close {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      margin-bottom: 22px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.35);
-      font-size: 13px;
-      color: #e8e8e8;
-      text-decoration: none;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+    @media (min-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
     }
-    #gallery-close span {
-      font-size: 11px;
-      opacity: 0.8;
+    
+    .photo-card {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: #222;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
-    .gallery-grid {
-      /* 컬럼 기반 Masonry 레이아웃 */
-      column-count: 3;
-      column-gap: 16px;
-    }
-    .gallery-grid > div {
-      break-inside: avoid;
-      -webkit-column-break-inside: avoid;
-      margin-bottom: 16px;
-    }
-    .gallery-grid img {
-      width: 100%;
-      display: block;
-      border-radius: 14px;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.6);
-    }
-    @media (max-width: 900px) {
-      #gallery {
-        padding-top: 64px;
-      }
-      .gallery-grid {
-        column-count: 2;
-        column-gap: 12px;
-      }
-      .gallery-grid > div {
-        margin-bottom: 12px;
-      }
+    .photo-card:hover { transform: scale(1.02); z-index: 10; }
+    .photo-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: opacity 0.3s;
     }
 
-    /* ====== 갤러리 이미지 확대 라이트박스 ====== */
+    /* 더보기 버튼 */
+    #loadMoreBtn {
+      display: block;
+      margin: 60px auto 20px;
+      padding: 14px 40px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      border-radius: 30px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    #loadMoreBtn:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+    /* 푸터 */
+    footer {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      background: #0f1012;
+    }
+
+    /* 라이트박스 */
     #lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.84);
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.9);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      display: none; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.3s;
     }
-    #lightbox.show {
-      display: flex;
-    }
-    #lightbox-img {
-      max-width: min(96vw, 1200px);
-      max-height: 90vh;
-      border-radius: 18px;
-      box-shadow: 0 24px 70px rgba(0,0,0,0.85);
+    #lightbox.show { display: flex; opacity: 1; }
+    #lightbox img {
+      max-width: 95vw; max-height: 90vh;
+      border-radius: 4px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
     #lightbox-close {
-      position: absolute;
-      top: 26px;
-      right: 26px;
-      border: none;
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 13px;
-      background: rgba(0,0,0,0.65);
-      color: #f5f5f5;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      position: absolute; top: 30px; right: 30px;
+      color: white; font-size: 30px; background: none; border: none; cursor: pointer;
     }
-    #lightbox-close:hover {
-      background: rgba(0,0,0,0.8);
+
+    /* 애니메이션 키프레임 */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-</style>
+  </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="panel">
-      <div class="brand">옥천 · 수북수북</div>
 
-      <div class="logos" aria-label="바로가기 링크">
-        <!-- Instagram -->
-        <a class="insta" href="https://www.instagram.com/subook.stay/" target="_blank" rel="noopener noreferrer" aria-label="Instagram으로 이동">
-          <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-        </a>
+  <div class="bg-layer"></div>
 
-        <!-- Airbnb -->
-        <a href="https://airbnb.co.kr/h/subook" target="_blank" rel="noopener noreferrer" aria-label="Airbnb로 이동">
-          <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg" alt="Airbnb">
-        </a>
+  <header class="hero">
+    <div class="logo-area">
+      <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png" alt="수북수북 로고" class="logo-img">
+    </div>
 
-        <!-- Naver 예약 -->
-        <a href="https://booking.naver.com/booking/3/bizes/1537541" target="_blank" rel="noopener noreferrer" aria-label="Naver 예약으로 이동">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/Naver_icon_2018.svg" alt="Naver 예약">
-        </a>
-
-        <!-- LiveAnywhere -->
-        <a class="live" href="https://www.liveanywhere.me/accommodations/45342?web-mode=true" target="_blank" rel="noopener noreferrer" aria-label="리브애니웨어로 이동">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/LiveAnywhere.png" alt="Live Anywhere" loading="lazy" decoding="async">
-        </a>
-
-        <!-- 수북수북 로고 (깃허브 CDN) -->
-        <a href="#gallery" class="chip" title="수북수북">
-          <img
-            class="brand-logo"
-            src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png"
-            alt="SubookSubook logo" loading="lazy" decoding="async">
-        </a>
+    <div class="title-area">
+      <h1>옥천 · 수북수북</h1>
       </div>
-    </section>
-  </main>
 
-      <!-- 수북수북 갤러리 오버레이 (로고 클릭 시 표시) -->
-      <section id="gallery" aria-label="수북수북 갤러리">
-        <div id="gallery-inner">
-          <a id="gallery-close" href="#" aria-label="갤러리 닫기">
-            ✕ 갤러리 닫기
-          </a>
-          <div class="gallery-grid" id="gallery-grid"></div>
+    <nav class="links-grid">
+      <a href="https://booking.naver.com/booking/3/bizes/1537541" target="_blank" class="link-card primary">
+        <div class="link-info">
+          <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/Naver_icon_2018.svg" class="link-icon" alt="네이버">
+          <span class="link-text">네이버 예약하기</span>
         </div>
-      </section>
+        <span class="link-arrow">→</span>
+      </a>
 
-      <!-- 갤러리 이미지 확대용 라이트박스 -->
-      <div id="lightbox" aria-hidden="true">
-        <button id="lightbox-close" type="button" aria-label="이미지 닫기">✕ 닫기</button>
-        <img id="lightbox-img" src="" alt="">
-      </div>
+      <a href="https://airbnb.co.kr/h/subook" target="_blank" class="link-card">
+        <div class="link-info">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg" class="link-icon" alt="에어비앤비">
+          <span class="link-text">Airbnb 예약하기</span>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
 
-    <script>
-      // ====== 갤러리 이미지 확대 라이트박스 ======
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightbox-img");
-      const lightboxClose = document.getElementById("lightbox-close");
+      <a href="https://www.instagram.com/subook.stay/" target="_blank" class="link-card">
+        <div class="link-info">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="link-icon" alt="인스타그램">
+          <span class="link-text">Instagram 둘러보기</span>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+      
+       <a href="https://www.liveanywhere.me/accommodations/45342?web-mode=true" target="_blank" class="link-card">
+        <div class="link-info">
+          <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/LiveAnywhere.png" class="link-icon" alt="리브애니웨어">
+          <span class="link-text">한 달 살기 (리브애니웨어)</span>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+    </nav>
 
-      function openLightbox(src, alt) {
-        if (!lightbox || !lightboxImg) return;
-        lightboxImg.src = src;
-        lightboxImg.alt = alt || "";
-        lightbox.classList.add("show");
-        document.body.style.overflow = "hidden"; // 배경 스크롤 잠금
+    <div class="scroll-hint" onclick="document.getElementById('gallery-section').scrollIntoView({behavior: 'smooth'})">
+      공간 둘러보기
+    </div>
+  </header>
+
+  <section id="gallery-section">
+    <div class="section-title">Gallery</div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+    <button id="loadMoreBtn">사진 더 보기</button>
+    
+    <footer>
+      <div><strong>수북수북</strong> | 대표: 최준혁</div>
+      <div style="margin-top:8px; opacity:0.6;">사업자번호: 484-34-01667</div>
+      <div style="margin-top:20px;">© 2025 SubookSubook. All rights reserved.</div>
+    </footer>
+  </section>
+
+  <div id="lightbox">
+    <button id="lightbox-close">✕</button>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    // 갤러리 로직
+    (function () {
+      const base = "https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/";
+      const grid = document.getElementById("gallery-grid");
+      const loadMoreBtn = document.getElementById("loadMoreBtn");
+      
+      const ids = [];
+      // 드론샷을 맨 앞으로
+      ids.push("DJI_20251114143734_0533_D","DJI_20251114143838_0537_D","DJI_20251114143859_0538_D","DJI_20251114144003_0542_D");
+      // 나머지 사진
+      for (let n = 1298; n <= 1406; n++) ids.push(`SDP0${n}`);
+
+      let currentIndex = 0;
+      const batchSize = 12;
+
+      function loadBatch() {
+        const slice = ids.slice(currentIndex, currentIndex + batchSize);
+        slice.forEach(id => {
+          const card = document.createElement("div");
+          card.className = "photo-card";
+
+          const img = document.createElement("img");
+          img.loading = "lazy";
+          img.src = base + id + ".webp";
+          img.onerror = () => { img.src = base + id + "-편집.webp"; };
+          
+          card.onclick = () => openLightbox(img.src);
+
+          card.appendChild(img);
+          grid.appendChild(card);
+        });
+
+        currentIndex += slice.length;
+        if (currentIndex >= ids.length) loadMoreBtn.style.display = "none";
       }
 
-      function closeLightbox() {
-        if (!lightbox) return;
+      loadMoreBtn.onclick = loadBatch;
+      loadBatch();
+    })();
+
+    // 라이트박스 로직
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+    
+    document.getElementById("lightbox-close").onclick = () => {
+      lightbox.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+    
+    lightbox.onclick = (e) => {
+      if(e.target === lightbox) {
         lightbox.classList.remove("show");
-        lightboxImg.src = "";
         document.body.style.overflow = "";
       }
-
-      if (lightbox) {
-        lightbox.addEventListener("click", (e) => {
-          // 배경을 클릭했을 때만 닫기 (이미지 클릭은 무시)
-          if (e.target === lightbox) {
-            closeLightbox();
-          }
-        });
-      }
-
-      if (lightboxClose) {
-        lightboxClose.addEventListener("click", (e) => {
-          e.preventDefault();
-          closeLightbox();
-        });
-      }
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closeLightbox();
-        }
-      });
-
-      // ====== 수북수북 갤러리 이미지 자동 생성 (원본 이름 + "-편집" 둘 다 대응) ======
-      (function () {
-        const base = "https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/";
-        const grid = document.getElementById("gallery-grid");
-        if (!grid) return;
-
-        // 파일 아이디 리스트 구성
-        const ids = [];
-
-        // SDP01298 ~ SDP01406
-        for (let n = 1298; n <= 1406; n++) {
-          ids.push(`SDP0${n}`);
-        }
-
-        // 드론 사진 4장
-        ids.push(
-          "DJI_20251114143734_0533_D",
-          "DJI_20251114143838_0537_D",
-          "DJI_20251114143859_0538_D",
-          "DJI_20251114144003_0542_D"
-        );
-
-        let batchSize = 30;     // 한 번에 불러올 이미지 수
-        let currentIndex = 0;   // 현재 어디까지 불러왔는지
-
-        const loadMoreBtn = document.createElement("button");
-        loadMoreBtn.textContent = "더 보기";
-        loadMoreBtn.style.display = "block";
-        loadMoreBtn.style.margin = "26px auto 40px";
-        loadMoreBtn.style.padding = "12px 22px";
-        loadMoreBtn.style.border = "1px solid rgba(255,255,255,0.32)";
-        loadMoreBtn.style.background = "rgba(0,0,0,0.45)";
-        loadMoreBtn.style.color = "#e8e8e8";
-        loadMoreBtn.style.borderRadius = "999px";
-        loadMoreBtn.style.fontSize = "14px";
-        loadMoreBtn.style.cursor = "pointer";
-
-        function loadBatch() {
-          const slice = ids.slice(currentIndex, currentIndex + batchSize);
-
-          slice.forEach((id, idx) => {
-            const wrapper = document.createElement("div");
-            wrapper.style.borderRadius = "18px";
-            wrapper.style.overflow = "hidden";
-            wrapper.style.boxShadow = "0 18px 48px rgba(0,0,0,0.7)";
-
-            const img = document.createElement("img");
-            img.alt = `수북수북 사진`;
-            img.loading = "lazy";
-            img.decoding = "async";
-            img.style.display = "block";
-            img.style.width = "100%";
-
-            let stage = 0;
-            img.src = base + id + ".webp";
-
-            img.addEventListener("error", () => {
-              stage++;
-              if (stage === 1) {
-                img.src = base + id + "-편집.webp";
-              } else {
-                wrapper.remove();
-              }
-            });
-
-            img.addEventListener("click", () => {
-              openLightbox(img.src, img.alt);
-            });
-
-            wrapper.appendChild(img);
-            grid.appendChild(wrapper);
-          });
-
-          currentIndex += slice.length;
-
-          if (currentIndex >= ids.length) {
-            loadMoreBtn.style.display = "none";
-          }
-        }
-
-        loadMoreBtn.addEventListener("click", loadBatch);
-
-        grid.parentNode.appendChild(loadMoreBtn);
-
-        loadBatch();
-      })();
-    </script>
-      <footer>
-        <div><strong>상호명</strong> 수북수북</div>
-        <div><strong>대표자명</strong> 최준혁</div>
-        <div><strong>사업자 등록번호</strong> <span class="plain-num">484&#8203;-34&#8203;-01667</span></div>
-        <div class="copy">© 2025 subooksubook. all rights reserved.</div>
-      </footer>
-    </body>
-  </html>
+    }
+  </script>
+</body>
+</html>
