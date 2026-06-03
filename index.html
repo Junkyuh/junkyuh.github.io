@@ -555,7 +555,15 @@
       
       const ids = [];
       ids.push("DJI_20251114143734_0533_D","DJI_20251114143838_0537_D","DJI_20251114143859_0538_D","DJI_20251114144003_0542_D");
-      for (let n = 1298; n <= 1406; n++) ids.push(`SDP0${n}`);
+      
+      // 존재하지 않는 이미지 ID 목록
+      const missingIds = new Set(["SDP01329", "SDP01384", "SDP01386", "SDP01396", "SDP01397", "SDP01404", "SDP01405"]);
+      for (let n = 1298; n <= 1406; n++) {
+        const id = `SDP0${n}`;
+        if (!missingIds.has(id)) {
+          ids.push(id);
+        }
+      }
 
       let currentIndex = 0;
       const batchSize = 10;
@@ -576,8 +584,15 @@
             card.classList.remove("loading");
             card.classList.add("loaded");
           };
+          
+          let attempts = 0;
           img.onerror = () => {
-            img.src = base + id + "-편집.webp";
+            attempts++;
+            if (attempts === 1) {
+              img.src = base + id + "-편집.webp";
+            } else {
+              card.remove();
+            }
           };
           
           card.onclick = () => openLightbox(img.src);
