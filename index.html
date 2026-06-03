@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="description" content="옥천의 고요한 쉼터, 수북수북">
-  <meta property="og:title" content="수북수북 | Subook Subook">
+  <meta property="og:title" content="수북수북 | Subook Book">
   <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png">
   <title>수북수북 | SubookSubook</title>
 
@@ -15,292 +15,496 @@
     /* === 초기화 및 변수 === */
     :root {
       --primary: #f5f5f7;
-      --glass: rgba(20, 20, 20, 0.65);
-      --glass-border: rgba(255, 255, 255, 0.15);
+      --background: #000000;
       --accent: #d4b886;
+      --accent-rgb: 212, 184, 134;
+      --card-bg: rgba(22, 22, 23, 0.55);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --font-serif: 'Noto Serif KR', serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     
     body {
-      font-family: "Pretendard", sans-serif;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: var(--primary);
-      background-color: #0f1012;
+      background-color: var(--background);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.02em;
     }
 
-    /* === 배경화면 (드론샷 활용) === */
-    .bg-layer {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      z-index: -1;
-      /* 네가 가진 드론 사진 중 가장 멋진 것 */
-      background-image: url('https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/DJI_20251114143734_0533_D.webp');
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.5); /* 글씨가 잘 보이게 어둡기 조절 */
-      transform: scale(1.05);
-      animation: slowZoom 20s infinite alternate;
-    }
-    @keyframes slowZoom { from { transform: scale(1.0); } to { transform: scale(1.1); } }
-
-    /* === 메인 컨테이너 === */
-    .hero {
-      position: relative;
+    /* === 파격적인 스플릿 레이아웃 설계 === */
+    .container {
+      display: flex;
+      flex-direction: column;
       min-height: 100vh;
+    }
+    
+    @media (min-width: 1024px) {
+      .container {
+        flex-direction: row;
+        height: 100vh;
+        overflow: hidden;
+      }
+    }
+
+    /* 왼쪽 고정 영역 (히어로 & 비주얼) */
+    .left-panel {
+      position: relative;
+      padding: 80px 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 20px;
+      min-height: 50vh;
     }
 
-    /* 로고 영역 */
+    @media (min-width: 1024px) {
+      .left-panel {
+        width: 45%;
+        height: 100vh;
+        min-height: auto;
+        padding: 80px;
+        position: sticky;
+        top: 0;
+      }
+    }
+
+    /* 배경 레이어 (드론샷) */
+    .bg-layer {
+      position: absolute; inset: 0;
+      z-index: -1;
+      background-image: url('https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/DJI_20251114143734_0533_D.webp');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.3) contrast(1.15);
+      transform: scale(1.03);
+      animation: slowZoom 40s infinite alternate ease-in-out;
+    }
+    @keyframes slowZoom { from { transform: scale(1.02); } to { transform: scale(1.1); } }
+
+    /* 로고 & 타이틀 */
     .logo-area {
-      margin-bottom: 30px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 0.2s;
+      margin-bottom: 24px;
     }
     .logo-img {
-      width: 110px;
+      width: 70px;
       height: auto;
-      filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
     }
-
-    /* 타이포그래피 (문구 삭제됨) */
-    .title-area {
-      margin-bottom: 50px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 0.4s;
+    .title-area span {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--accent);
+      margin-bottom: 12px;
     }
     h1 {
-      font-family: 'Noto Serif KR', serif; /* 명조체 */
-      font-size: clamp(30px, 6vw, 46px);
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      color: #f5f5f5;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-family: var(--font-serif);
+      font-size: clamp(34px, 5.5vw, 48px);
+      font-weight: 300;
+      line-height: 1.25;
+      color: #ffffff;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
     }
 
-    /* === 링크 카드 (글래스모피즘) === */
+    /* 오른쪽 스크롤 영역 */
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #000000;
+    }
+
+    @media (min-width: 1024px) {
+      .right-panel {
+        height: 100vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        padding-right: 8px;
+      }
+      /* 스크롤바 디자인 */
+      .right-panel::-webkit-scrollbar { width: 6px; }
+      .right-panel::-webkit-scrollbar-track { background: #000; }
+      .right-panel::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+      .right-panel::-webkit-scrollbar-thumb:hover { background: #333; }
+    }
+
+    /* 오른쪽 패널 콘텐츠 패딩 */
+    .right-content {
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* === 링크 카드 그리드 === */
     .links-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
       width: 100%;
-      max-width: 400px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 0.6s;
+      margin-bottom: 80px;
+    }
+
+    @media (min-width: 640px) {
+      .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
     }
 
     .link-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 24px;
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      text-decoration: none;
-      color: white;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-    .link-card:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-    .link-info { display: flex; align-items: center; gap: 14px; }
-    .link-icon { width: 24px; height: 24px; object-fit: contain; opacity: 0.9; }
-    .link-text { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
-    .link-arrow { font-size: 14px; opacity: 0.5; }
-
-    /* 예약 강조 스타일 */
-    .link-card.primary {
-      background: rgba(255, 255, 255, 0.9);
-      color: #111;
-    }
-    .link-card.primary:hover { background: #fff; transform: scale(1.02); }
-    .link-card.primary .link-arrow { opacity: 1; color: #111; }
-
-    /* === 갤러리 진입 버튼 === */
-    .scroll-hint {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 13px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 1s;
-      cursor: pointer;
+      position: relative;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: rgba(255, 255, 255, 0.6);
-    }
-    .scroll-hint::after {
-      content: "";
-      width: 1px;
-      height: 30px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
-    }
-
-    /* === 갤러리 섹션 === */
-    #gallery-section {
-      position: relative;
-      background: #0f1012;
-      padding: 80px 20px 40px;
-      min-height: 100vh;
-      z-index: 2;
-    }
-    .section-title {
-      text-align: center;
-      font-family: 'Noto Serif KR', serif;
-      font-size: 24px;
-      margin-bottom: 40px;
-      color: rgba(255,255,255,0.9);
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    @media (min-width: 768px) {
-      .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    }
-    
-    .photo-card {
-      position: relative;
-      border-radius: 8px;
+      justify-content: space-between;
+      min-height: 110px;
+      padding: 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      text-decoration: none;
+      color: #ffffff;
       overflow: hidden;
-      aspect-ratio: 4/3;
-      background: #222;
-      cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
     }
-    .photo-card:hover { transform: scale(1.02); z-index: 10; }
-    .photo-card img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: opacity 0.3s;
+    .link-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    }
+    .link-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(28, 28, 30, 0.65);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
     }
 
-    /* 더보기 버튼 */
-    #loadMoreBtn {
-      display: block;
-      margin: 60px auto 20px;
-      padding: 14px 40px;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white;
-      border-radius: 30px;
-      font-size: 14px;
-      cursor: pointer;
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .link-icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
       transition: all 0.3s;
     }
-    #loadMoreBtn:hover { border-color: white; background: rgba(255,255,255,0.1); }
+    .link-icon { width: 20px; height: 20px; object-fit: contain; }
+    .link-card:hover .link-icon-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .link-arrow {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.35);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .link-card:hover .link-arrow {
+      color: #ffffff;
+      transform: translate(2px, -2px);
+    }
+
+    .card-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-align: left;
+    }
+    .link-category {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .link-text { font-size: 16px; font-weight: 500; color: #ffffff; }
+
+    /* 예약 강조 카드 (네이버) */
+    .link-card.primary {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+    }
+    .link-card.primary:hover {
+      background: #ffffff;
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(255, 255, 255, 0.15);
+    }
+    .link-card.primary .link-text { color: #000000; font-weight: 600; }
+    .link-card.primary .link-category { color: #86868b; }
+    .link-card.primary .link-icon-container { background: rgba(0,0,0,0.04); border: none; }
+    .link-card.primary .link-arrow { color: rgba(0,0,0,0.3); }
+    .link-card.primary:hover .link-arrow { color: #000000; }
+
+    /* === 갤러리 영역 === */
+    .gallery-container {
+      width: 100%;
+      text-align: center;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      font-size: 26px;
+      margin-bottom: 30px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .section-title::after, .section-title::before {
+      content: "";
+      width: 20px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* 🖼️ 이미지 로딩 뼈대 (Skeleton Shimmer Effect) */
+    .photo-card {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: #121214;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .photo-card.loading::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, #121214 25%, #1a1a1f 50%, #121214 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite linear;
+      z-index: 1;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .photo-card::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 60%);
+      opacity: 0.8;
+    }
+    .photo-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+      z-index: 5;
+    }
+    .photo-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .photo-card.loaded img {
+      opacity: 1;
+    }
+    .photo-card:hover img {
+      transform: scale(1.04);
+    }
+
+    /* 더보기 / 접기 컨트롤 버튼 컨테이너 */
+    .gallery-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .btn-control {
+      padding: 12px 32px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #ffffff;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-control:hover {
+      border-color: #ffffff;
+      background: #ffffff;
+      color: #000000;
+      transform: translateY(-2px);
+    }
+    #hideBtn {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    #hideBtn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
 
     /* 푸터 */
     footer {
       text-align: center;
-      padding: 60px 20px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      background: #0f1012;
+      padding: 80px 20px 40px;
+      font-size: 11px;
+      color: #636366;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      line-height: 1.8;
+      width: 100%;
     }
 
     /* 라이트박스 */
     #lightbox {
       position: fixed; inset: 0; z-index: 100;
-      background: rgba(0,0,0,0.9);
-      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       display: none; justify-content: center; align-items: center;
-      opacity: 0; transition: opacity 0.3s;
+      opacity: 0; transition: opacity 0.4s ease;
     }
     #lightbox.show { display: flex; opacity: 1; }
     #lightbox img {
-      max-width: 95vw; max-height: 90vh;
-      border-radius: 4px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      max-width: 92vw; max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+      transform: scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    #lightbox.show img { transform: scale(1); }
     #lightbox-close {
       position: absolute; top: 30px; right: 30px;
-      color: white; font-size: 30px; background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.7); font-size: 20px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      width: 48px; height: 48px; border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
     }
-
-    /* 애니메이션 키프레임 */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    #lightbox-close:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.18);
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-layer"></div>
-
-  <header class="hero">
-    <div class="logo-area">
-      <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png" alt="수북수북 로고" class="logo-img">
-    </div>
-
-    <div class="title-area">
-      <h1>옥천 · 수북수북</h1>
+  <div class="container">
+    <!-- 왼쪽: 고정 히어로 영역 -->
+    <div class="left-panel">
+      <div class="bg-layer"></div>
+      <div class="logo-area">
+        <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png" alt="수북수북 로고" class="logo-img">
       </div>
-
-    <nav class="links-grid">
-      <a href="https://booking.naver.com/booking/3/bizes/1537541" target="_blank" class="link-card primary">
-        <div class="link-info">
-          <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/Naver_icon_2018.svg" class="link-icon" alt="네이버">
-          <span class="link-text">네이버 예약하기</span>
-        </div>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a href="https://airbnb.co.kr/h/subook" target="_blank" class="link-card">
-        <div class="link-info">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg" class="link-icon" alt="에어비앤비">
-          <span class="link-text">Airbnb 예약하기</span>
-        </div>
-        <span class="link-arrow">↗</span>
-      </a>
-
-      <a href="https://www.instagram.com/subook.stay/" target="_blank" class="link-card">
-        <div class="link-info">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="link-icon" alt="인스타그램">
-          <span class="link-text">Instagram 둘러보기</span>
-        </div>
-        <span class="link-arrow">↗</span>
-      </a>
-      
-       <a href="https://www.liveanywhere.me/accommodations/45342?web-mode=true" target="_blank" class="link-card">
-        <div class="link-info">
-          <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/LiveAnywhere.png" class="link-icon" alt="리브애니웨어">
-          <span class="link-text">한 달 살기 (리브애니웨어)</span>
-        </div>
-        <span class="link-arrow">↗</span>
-      </a>
-    </nav>
-
-    <div class="scroll-hint" onclick="document.getElementById('gallery-section').scrollIntoView({behavior: 'smooth'})">
-      공간 둘러보기
+      <div class="title-area">
+        <span>SOBOOK SOBOOK</span>
+        <h1>옥천 수북수북</h1>
+      </div>
     </div>
-  </header>
 
-  <section id="gallery-section">
-    <div class="section-title">Gallery</div>
-    <div class="gallery-grid" id="gallery-grid"></div>
-    <button id="loadMoreBtn">사진 더 보기</button>
-    
-    <footer>
-      <div><strong>수북수북</strong> | 대표: 최준혁</div>
-      <div style="margin-top:8px; opacity:0.6;">사업자번호: 484-34-01667</div>
-      <div style="margin-top:20px;">© 2025 SubookSubook. All rights reserved.</div>
-    </footer>
-  </section>
+    <!-- 오른쪽: 스크롤 링크 및 콘텐츠 영역 -->
+    <div class="right-panel">
+      <div class="right-content">
+        
+        <nav class="links-grid">
+          <a href="https://booking.naver.com/booking/3/bizes/1537541" target="_blank" class="link-card primary">
+            <div class="card-top">
+              <div class="link-icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/Naver_icon_2018.svg" class="link-icon" alt="네이버">
+              </div>
+              <span class="link-arrow">↗</span>
+            </div>
+            <div class="card-bottom">
+              <span class="link-category">Reservation</span>
+              <span class="link-text">네이버 예약하기</span>
+            </div>
+          </a>
+
+          <a href="https://airbnb.co.kr/h/subook" target="_blank" class="link-card">
+            <div class="card-top">
+              <div class="link-icon-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg" class="link-icon" alt="에어비앤비">
+              </div>
+              <span class="link-arrow">↗</span>
+            </div>
+            <div class="card-bottom">
+              <span class="link-category">Airbnb</span>
+              <span class="link-text">Airbnb 예약하기</span>
+            </div>
+          </a>
+
+          <a href="https://www.instagram.com/subook.stay/" target="_blank" class="link-card">
+            <div class="card-top">
+              <div class="link-icon-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="link-icon" alt="인스타그램">
+              </div>
+              <span class="link-arrow">↗</span>
+            </div>
+            <div class="card-bottom">
+              <span class="link-category">Social</span>
+              <span class="link-text">Instagram 둘러보기</span>
+            </div>
+          </a>
+          
+          <a href="https://www.liveanywhere.me/accommodations/45342?web-mode=true" target="_blank" class="link-card">
+            <div class="card-top">
+              <div class="link-icon-container">
+                <img src="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/LiveAnywhere.png" class="link-icon" alt="리브애니웨어">
+              </div>
+              <span class="link-arrow">↗</span>
+            </div>
+            <div class="card-bottom">
+              <span class="link-category">Long Stay</span>
+              <span class="link-text">한 달 살기 신청</span>
+            </div>
+          </a>
+        </nav>
+
+        <section class="gallery-container">
+          <div class="section-title">Gallery</div>
+          <div class="gallery-grid" id="gallery-grid"></div>
+          
+          <div class="gallery-actions">
+            <button id="hideBtn" class="btn-control" style="display: none;">사진 접기</button>
+            <button id="loadMoreBtn" class="btn-control">사진 더 보기</button>
+          </div>
+        </section>
+
+        <footer>
+          <div><strong>수북수북</strong> | 대표: 최준혁</div>
+          <div style="margin-top:4px; opacity:0.7;">사업자번호: 484-34-01667</div>
+          <div style="margin-top:16px;">© 2025 SubookSubook. All rights reserved.</div>
+        </footer>
+
+      </div>
+    </div>
+  </div>
 
   <div id="lightbox">
     <button id="lightbox-close">✕</button>
@@ -308,47 +512,73 @@
   </div>
 
   <script>
-    // 갤러리 로직
     (function () {
       const base = "https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/webp_only/";
       const grid = document.getElementById("gallery-grid");
       const loadMoreBtn = document.getElementById("loadMoreBtn");
+      const hideBtn = document.getElementById("hideBtn");
       
       const ids = [];
-      // 드론샷을 맨 앞으로
       ids.push("DJI_20251114143734_0533_D","DJI_20251114143838_0537_D","DJI_20251114143859_0538_D","DJI_20251114144003_0542_D");
-      // 나머지 사진
       for (let n = 1298; n <= 1406; n++) ids.push(`SDP0${n}`);
 
       let currentIndex = 0;
-      const batchSize = 12;
+      const batchSize = 10;
+      const initialBatchSize = 6; // 최초엔 6장만 로드
 
-      function loadBatch() {
-        const slice = ids.slice(currentIndex, currentIndex + batchSize);
+      function loadBatch(size) {
+        const targetSize = size || batchSize;
+        const slice = ids.slice(currentIndex, currentIndex + targetSize);
+        
         slice.forEach(id => {
           const card = document.createElement("div");
-          card.className = "photo-card";
+          card.className = "photo-card loading";
 
           const img = document.createElement("img");
-          img.loading = "lazy";
           img.src = base + id + ".webp";
-          img.onerror = () => { img.src = base + id + "-편집.webp"; };
+          
+          img.onload = () => {
+            card.classList.remove("loading");
+            card.classList.add("loaded");
+          };
+          img.onerror = () => {
+            img.src = base + id + "-편집.webp";
+          };
           
           card.onclick = () => openLightbox(img.src);
-
           card.appendChild(img);
           grid.appendChild(card);
         });
 
         currentIndex += slice.length;
-        if (currentIndex >= ids.length) loadMoreBtn.style.display = "none";
+        
+        if (currentIndex > initialBatchSize) {
+          hideBtn.style.display = "block";
+        }
+        if (currentIndex >= ids.length) {
+          loadMoreBtn.style.display = "none";
+        }
       }
 
-      loadMoreBtn.onclick = loadBatch;
-      loadBatch();
+      hideBtn.onclick = () => {
+        grid.innerHTML = "";
+        currentIndex = 0;
+        loadBatch(initialBatchSize);
+        hideBtn.style.display = "none";
+        loadMoreBtn.style.display = "block";
+        
+        if (window.innerWidth >= 1024) {
+          document.querySelector(".right-panel").scrollTop = document.querySelector(".gallery-container").offsetTop - 60;
+        } else {
+          window.scrollTo({ top: document.getElementById("gallery-grid").offsetTop - 60, behavior: 'smooth' });
+        }
+      };
+
+      loadMoreBtn.onclick = () => loadBatch(batchSize);
+      loadBatch(initialBatchSize);
     })();
 
-    // 라이트박스 로직
+    // 라이트박스
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
     
