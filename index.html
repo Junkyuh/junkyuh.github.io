@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="description" content="옥천의 고요한 쉼터, 수북수북">
   <meta property="og:title" content="수북수북 | Subook Book">
   <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Junkyuh/subooksubook-assets/logo.png">
@@ -51,13 +52,13 @@
     /* 왼쪽 고정 영역 (히어로 & 비주얼) */
     .left-panel {
       position: relative;
-      padding: 80px 40px;
+      padding: 60px 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      min-height: 50vh;
+      min-height: 40vh;
     }
 
     @media (min-width: 1024px) {
@@ -86,25 +87,25 @@
 
     /* 로고 & 타이틀 */
     .logo-area {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
     .logo-img {
-      width: 70px;
+      width: 64px;
       height: auto;
       filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
     }
     .title-area span {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       color: var(--accent);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     h1 {
       font-family: var(--font-serif);
-      font-size: clamp(34px, 5.5vw, 48px);
+      font-size: clamp(30px, 5.5vw, 48px);
       font-weight: 300;
       line-height: 1.25;
       color: #ffffff;
@@ -135,7 +136,7 @@
 
     /* 오른쪽 패널 콘텐츠 패딩 */
     .right-content {
-      padding: 60px 24px;
+      padding: 40px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -148,9 +149,9 @@
     .links-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
       width: 100%;
-      margin-bottom: 80px;
+      margin-bottom: 60px;
     }
 
     @media (min-width: 640px) {
@@ -238,6 +239,40 @@
       text-transform: uppercase;
     }
     .link-text { font-size: 16px; font-weight: 500; color: #ffffff; }
+
+    /* 모바일 타겟 768px 미만 세밀 튜닝 */
+    @media (max-width: 767px) {
+      .right-content {
+        padding: 24px 16px;
+      }
+      .links-grid {
+        margin-bottom: 48px;
+        gap: 12px;
+      }
+      .link-card {
+        min-height: 80px; /* 높이를 슬림하게 조율 */
+        padding: 14px 18px;
+        border-radius: 16px;
+      }
+      .card-top {
+        margin-bottom: 8px;
+      }
+      .link-icon-container {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+      }
+      .link-icon {
+        width: 16px;
+        height: 16px;
+      }
+      .link-text {
+        font-size: 14.5px; /* 약간 더 콤팩트한 본문 글꼴 */
+      }
+      .link-category {
+        font-size: 9px;
+      }
+    }
 
     /* 예약 강조 카드 (네이버) */
     .link-card.primary {
