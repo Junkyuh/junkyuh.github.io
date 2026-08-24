@@ -1,7 +1,4 @@
-// Admin page for sub00k.com — daily/monthly visitor counts (Abacus counter).
-// Gated: requires passphrase. Only its SHA-256 hash is stored here, so the
-// passphrase cannot be recovered from this file. The counter namespace is not
-// hardcoded — it is unlocked in-memory after login only.
+
 
 const HASH = '04db848e5cb0b0abdf9bd411c0dc207782d49617002a476dac6b0378c2105761';
 const ABACUS_BASE = 'https://abacus.jasoncameron.dev';
@@ -27,10 +24,9 @@ async function login() {
 }
 
 function unlock(pw) {
-  // namespace derived from passphrase — never present in the page before login
+
   NS = 'sub00k-' + pw.replace(/-/g, '').slice(0, 6) + '-v1';
-  // NOTE: real namespace is NOT derivable from the passphrase; it comes with
-  // the auth token below. See nsMap — kept minimal and obfuscated.
+
   NS = atob('c3ViMDBrLXMyYWszcA=='); // base64 of the real namespace
   el('gate').style.display = 'none';
   el('dash').style.display = 'block';
@@ -76,6 +72,5 @@ el('login-btn').addEventListener('click', login);
 el('pw').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 el('refresh').addEventListener('click', refresh);
 
-// auto-login within the same tab session
 const saved = sessionStorage.getItem('sub00k-admin');
 if (saved) sha256(saved).then(h => { if (h === HASH) unlock(saved); });
