@@ -33,18 +33,33 @@
 </head>
 <body>
   <main class="wrap">
-    <h1>수북수북 방문자</h1>
-    <p class="sub">sub00k.com 트래픽 카운트</p>
-    <div id="cards" class="cards opacity-40">
-      <div class="card"><div class="label">오늘</div><div class="num" id="today">–</div></div>
-      <div class="card"><div class="label">이번 달</div><div class="num" id="month">–</div></div>
-      <div class="card"><div class="label">누적</div><div class="num" id="total">–</div></div>
+    <!-- Login gate -->
+    <div id="gate">
+      <h1>수북수북 관리자</h1>
+      <p class="sub">암호를 입력하세요</p>
+      <input id="pw" type="password" placeholder="암호" autocomplete="current-password"
+        style="width:100%;padding:12px 14px;background:#1a1916;border:1px solid #2a2823;border-radius:10px;color:#f4f1ea;font-size:14px;outline:none;" />
+      <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
+        <button id="login-btn" style="padding:10px 20px;">열기</button>
+        <span id="login-error" style="color:#d96a5b;font-size:12px;"></span>
+      </div>
     </div>
-    <div class="foot">
-      <span>갱신: <span id="updated">–</span></span>
-      <button id="refresh">새로고침</button>
+
+    <!-- Dashboard (hidden until login) -->
+    <div id="dash" style="display:none;">
+      <h1>수북수북 방문자</h1>
+      <p class="sub">sub00k.com 트래픽 카운트</p>
+      <div id="cards" class="cards opacity-40">
+        <div class="card"><div class="label">오늘</div><div class="num" id="today">–</div></div>
+        <div class="card"><div class="label">이번 달</div><div class="num" id="month">–</div></div>
+        <div class="card"><div class="label">누적</div><div class="num" id="total">–</div></div>
+      </div>
+      <div class="foot">
+        <span>갱신: <span id="updated">–</span></span>
+        <button id="refresh">새로고침</button>
+      </div>
+      <div id="error"></div>
     </div>
-    <div id="error"></div>
   </main>
   <script src="./admin.js"></script>
 </body>
