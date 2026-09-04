@@ -2,6 +2,7 @@
 
 const HASH = '04db848e5cb0b0abdf9bd411c0dc207782d49617002a476dac6b0378c2105761';
 import { loadSnapshot, displayCount, summarize, makeCsv } from './stats.js?v=2';
+import { createBehaviorPanel } from './behavior.js?v=1';
 const ABACUS_BASE = 'https://abacus.jasoncameron.dev';
 
 const el = (id) => document.getElementById(id);
@@ -11,6 +12,7 @@ let snapshot = null;
 let nextRefresh = 0;
 let loginPending = false;
 let cooldownTimer = null;
+const behaviorPanel = createBehaviorPanel(() => NS);
 
 async function sha256(text) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -49,6 +51,7 @@ function unlock() {
   el('dash').hidden = false;
   el('dashboard-title').focus();
   refresh();
+  behaviorPanel.load();
   if (Date.now() < nextRefresh) setTimeout(() => { if (NS && !snapshot) refresh(); }, nextRefresh - Date.now() + 30);
 }
 
@@ -67,6 +70,7 @@ function clearView() {
 
 function lock() {
   NS = null;
+  behaviorPanel.reset();
   if (activeRequest) nextRefresh = Date.now() + 15_000;
   activeRequest?.abort();
   activeRequest = null;

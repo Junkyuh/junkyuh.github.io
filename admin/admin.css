@@ -53,6 +53,15 @@ caption { text-align: left; padding: 8px 0; }
 th, td { text-align: left; padding: 12px 6px; border-bottom: 1px solid #e0e3d9; }
 th { font-weight: 600; }
 .guide { margin-top: 24px; }
+.behavior { margin-bottom: 24px; }
+.behavior-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 24px 0 12px; }
+.behavior-controls input { padding: 10px; min-height: 44px; min-width: 0; max-width: 100%; border: 1px solid #869586; border-radius: 8px; background: white; color: #263d34; }
+.behavior-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.behavior-card { min-width: 0; padding: 18px; border: 1px solid #dce0d5; border-radius: 12px; }
+.behavior-card th, .behavior-card td { padding: 10px 4px; }
+.behavior-card td:first-child { width: 52%; }
+.behavior-card td:not(:first-child) { font-variant-numeric: tabular-nums; }
+@media(max-width: 700px) { .behavior-grid { grid-template-columns: 1fr; } .behavior-card { padding: 14px; } }
 .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 22px 0; }
 .guide p { color: #616d61; font-size: 14px; }
 .guide details { border-top: 1px solid #dce0d5; }

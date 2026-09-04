@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="referrer" content="no-referrer" />
   <title>수북수북 관리자</title>
-  <link rel="stylesheet" href="./admin.css?v=2" />
+  <link rel="stylesheet" href="./admin.css?v=3" />
 </head>
 <body>
   <main class="wrap">
@@ -30,7 +30,7 @@
       </header>
       <section class="toolbar panel" aria-label="조회 상태">
         <div><p id="status" role="status" aria-live="polite">방문 기록을 준비하고 있습니다.</p><p id="updated" class="small muted">아직 조회하지 않았습니다.</p></div>
-        <div class="actions"><label class="check"><input id="auto" type="checkbox" />5분마다 갱신</label><button id="refresh">새로고침</button></div>
+        <div class="actions"><label class="check"><input id="auto" type="checkbox" />방문 횟수 5분마다 갱신</label><button id="refresh">새로고침</button></div>
       </section>
       <p id="error" class="error" role="alert"></p>
       <section id="cards" class="cards" aria-label="방문 횟수 요약">
@@ -39,6 +39,15 @@
         <article class="card"><h2>이번 달 방문</h2><p class="metric" id="month">—</p><p id="month-note" class="small muted">월초부터 현재까지</p></article>
         <article class="card"><h2>누적 방문</h2><p class="metric" id="total">—</p><p class="small muted">현재 집계 장치에 저장된 전체 기록</p></article>
       </section>
+      <section class="panel behavior" aria-labelledby="behavior-title">
+        <div class="section-head"><div><p class="eyebrow">INTEREST → BOOKING</p><h2 id="behavior-title">관심이 예약으로 이어지는 길</h2><p class="small muted">많이 누른 버튼 · 화면 체류 · 관심 구간 · 유입 경로</p></div><button id="behavior-export" class="secondary" disabled>행동 기록 내려받기</button></div>
+        <div class="behavior-controls"><label for="behavior-date">확인할 날짜</label><input type="date" id="behavior-date" /><button id="behavior-load">행동 통계 보기</button></div>
+        <p id="behavior-status" class="small muted" role="status" aria-live="polite">행동 기록을 준비하고 있습니다.</p>
+        <p id="behavior-summary" class="insight">새 행동 기록은 2026년 9월 4일 적용 이후부터 쌓입니다.</p>
+        <div id="behavior-body" class="behavior-grid"></div>
+        <details><summary>이 숫자로 무엇을 결정하면 되나요?</summary><p class="small muted">사진 관심은 많은데 예약 이동이 적다면 요금·이용 조건과 예약 안내를 살펴보세요. 방문이 늘어도 짧게 보고 나간다면 첫 화면과 유입 경로를 함께 확인하세요. 이는 점검할 후보이지 원인을 증명하는 숫자는 아닙니다.</p><p class="small muted">비율은 같은 날짜에 행동 집계가 시작된 방문을 기준으로 합니다. 한 방문이 여러 항목에 포함되며 합이 100%가 되지 않습니다. 통신 실패·차단으로 항목별 누락이 있을 수 있어 비율을 계산할 수 없을 때는 —로 표시합니다. 과거 기록·실제 예약 완료·평균 체류 시간은 추정해 만들지 않습니다.</p></details>
+        <label class="check"><input id="exclude-owner" type="checkbox" />이 브라우저의 내 행동은 새 통계에서 제외</label><p id="exclude-note" class="small muted">기존 방문 횟수에는 적용되지 않습니다. 이름·연락처·입력 내용·화면 녹화는 수집하지 않습니다.</p>
+      </section>
       <section class="panel trends" aria-labelledby="trend-title">
         <div class="section-head"><div><p class="eyebrow">DAILY INTEREST</p><h2 id="trend-title">최근 7일의 관심</h2><p id="range" class="small muted">오늘을 포함한 일별 방문 횟수</p></div><button id="download" class="secondary" disabled>기록 내려받기</button></div>
         <p id="insight" class="insight">기록을 불러오면 방문 흐름을 확인할 수 있습니다.</p>
@@ -46,12 +55,12 @@
         <details><summary>날짜별 숫자 자세히 보기</summary><table><caption class="small muted">최근 7일 방문 기록 · 오늘은 집계 중</caption><thead><tr><th scope="col">날짜</th><th scope="col">방문 횟수</th><th scope="col">상태</th></tr></thead><tbody id="daily-rows"></tbody></table></details>
       </section>
       <section class="guide panel" aria-labelledby="guide-title"><h2 id="guide-title">사장님, 숫자는 이렇게 읽어 주세요</h2>
-        <div class="guide-grid"><div><h3>방문 횟수 ≠ 사람 수 ≠ 예약 수</h3><p>가게의 출입문이 열린 횟수와 비슷합니다. 같은 사람이 다른 탭·기기로 오면 다시 셀 수 있고, 광고 차단이나 통신 오류로 빠질 수도 있습니다.</p></div><div><h3>홍보한 날과 다음 날을 함께 보세요</h3><p>사진이나 글을 올린 날짜를 적어 두고 방문 흐름과 비교해 보세요. 이 화면만으로 어디서 왔는지, 홍보 때문에 늘었는지, 예약했는지는 알 수 없습니다.</p></div></div>
+        <div class="guide-grid"><div><h3>방문 횟수 ≠ 사람 수 ≠ 예약 수</h3><p>가게의 출입문이 열린 횟수와 비슷합니다. 같은 사람이 다른 탭·기기로 오면 다시 셀 수 있고, 광고 차단이나 통신 오류로 빠질 수도 있습니다.</p></div><div><h3>홍보한 날과 다음 날을 함께 보세요</h3><p>사진이나 글을 올린 날짜를 적어 두고 방문 흐름과 비교해 보세요. 경로 종류와 버튼 관심은 위 행동 통계에서 확인하되, 홍보가 증가의 원인인지와 실제 예약 완료 여부는 이 화면만으로 알 수 없습니다.</p></div></div>
         <details><summary>집계 기준과 보안 안내</summary><p>날짜는 한국 시간으로 조회합니다. 기존 집계는 방문자 기기의 날짜를 사용하므로 해외 방문은 날짜 경계에 차이가 날 수 있습니다. 없는 기록을 0회로 만들지 않으며, 과거에 누락된 방문은 복원하지 않습니다. 월별·누적 기록은 따로 저장되어 일별 합계와 다를 수 있습니다.</p><p>이 암호 화면은 간단한 가림막이지, 금고 같은 서버 보안은 아닙니다. 예약자 이름·연락처 같은 개인정보를 이 페이지에 넣지 마세요. 화면 잠그기는 현재 화면을 닫는 기능입니다.</p></details>
       </section>
       <footer class="small muted">수북수북 · 운영을 위한 작은 기록장</footer>
     </div>
   </main>
-  <script type="module" src="./admin.js?v=2"></script>
+  <script type="module" src="./admin.js?v=3"></script>
 </body>
 </html>
