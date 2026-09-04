@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Keep /admin crawlable so its existing noindex directive can be read.
+# robots.txt is not an access-control mechanism.
+Sitemap: https://sub00k.com/sitemap.xml
