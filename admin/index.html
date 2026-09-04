@@ -4,63 +4,54 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
   <title>수북수북 관리자</title>
-  <style>
-    * { margin: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-      background: #0f0f0e; color: #f4f1ea;
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      padding: 24px;
-    }
-    .wrap { width: 100%; max-width: 560px; }
-    h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
-    .sub { font-size: 13px; color: #8a857a; margin-bottom: 28px; }
-    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; transition: opacity .3s; }
-    @media (max-width: 480px) { .cards { grid-template-columns: 1fr; } }
-    .card { background: #1a1916; border: 1px solid #2a2823; border-radius: 14px; padding: 20px 18px; }
-    .card .label { font-size: 12px; color: #8a857a; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .card .label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #c8a45e; }
-    .card .num { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-    .foot { margin-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #8a857a; }
-    button {
-      background: #c8a45e; color: #14120e; border: 0; border-radius: 8px;
-      padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
-    }
-    button:hover { filter: brightness(1.08); }
-    #error { color: #d96a5b; font-size: 12px; margin-top: 12px; }
-  </style>
+  <link rel="stylesheet" href="./admin.css?v=2" />
 </head>
 <body>
   <main class="wrap">
-    <!-- Login gate -->
-    <div id="gate">
-      <h1>수북수북 관리자</h1>
-      <p class="sub">암호를 입력하세요</p>
-      <input id="pw" type="password" placeholder="암호" autocomplete="current-password"
-        style="width:100%;padding:12px 14px;background:#1a1916;border:1px solid #2a2823;border-radius:10px;color:#f4f1ea;font-size:14px;outline:none;" />
-      <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
-        <button id="login-btn" style="padding:10px 20px;">열기</button>
-        <span id="login-error" style="color:#d96a5b;font-size:12px;"></span>
-      </div>
-    </div>
-
-    <!-- Dashboard (hidden until login) -->
-    <div id="dash" style="display:none;">
-      <h1>수북수북 방문자</h1>
-      <p class="sub">sub00k.com 트래픽 카운트</p>
-      <div id="cards" class="cards opacity-40">
-        <div class="card"><div class="label">오늘</div><div class="num" id="today">–</div></div>
-        <div class="card"><div class="label">이번 달</div><div class="num" id="month">–</div></div>
-        <div class="card"><div class="label">누적</div><div class="num" id="total">–</div></div>
-      </div>
-      <div class="foot">
-        <span>갱신: <span id="updated">–</span></span>
-        <button id="refresh">새로고침</button>
-      </div>
-      <div id="error"></div>
+    <section id="gate" class="gate panel" aria-labelledby="login-title">
+      <p class="eyebrow">SUBOOK SUBOOK · OWNER</p>
+      <h1 id="login-title">수북수북 운영 노트</h1>
+      <p class="muted">오늘 우리 숙소를 찾아온 관심을 확인하세요.</p>
+      <form id="login-form">
+        <label for="pw">관리자 암호</label>
+        <input id="pw" type="password" autocomplete="current-password" required aria-describedby="login-error" />
+        <button id="login-btn" type="submit">방문 현황 열기</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+      <p class="small muted">암호는 이 페이지에 저장하지 않습니다. 새로 열면 다시 입력해 주세요.</p>
+      <a href="/">숙소 홈페이지로 돌아가기 ↗</a>
+    </section>
+    <div id="dash" hidden>
+      <header class="header">
+        <div><p class="eyebrow">SUBOOK SUBOOK · OWNER</p><h1 id="dashboard-title" tabindex="-1">방문 현황</h1><p class="muted">예약이 아닌, 홈페이지에 모인 관심을 보는 곳입니다.</p></div>
+        <nav aria-label="관리자 메뉴"><a class="button secondary" href="/" target="_blank" rel="noopener noreferrer">홈페이지 보기 ↗</a><button id="lock" class="secondary">화면 잠그기</button></nav>
+      </header>
+      <section class="toolbar panel" aria-label="조회 상태">
+        <div><p id="status" role="status" aria-live="polite">방문 기록을 준비하고 있습니다.</p><p id="updated" class="small muted">아직 조회하지 않았습니다.</p></div>
+        <div class="actions"><label class="check"><input id="auto" type="checkbox" />5분마다 갱신</label><button id="refresh">새로고침</button></div>
+      </section>
+      <p id="error" class="error" role="alert"></p>
+      <section id="cards" class="cards" aria-label="방문 횟수 요약">
+        <article class="card featured"><h2>오늘 방문</h2><p class="metric" id="today">—</p><p class="small">오늘은 아직 집계 중입니다.</p></article>
+        <article class="card"><h2>어제 방문</h2><p class="metric" id="yesterday">—</p><p id="yesterday-note" class="small muted">하루 전체 기록</p></article>
+        <article class="card"><h2>이번 달 방문</h2><p class="metric" id="month">—</p><p id="month-note" class="small muted">월초부터 현재까지</p></article>
+        <article class="card"><h2>누적 방문</h2><p class="metric" id="total">—</p><p class="small muted">현재 집계 장치에 저장된 전체 기록</p></article>
+      </section>
+      <section class="panel trends" aria-labelledby="trend-title">
+        <div class="section-head"><div><p class="eyebrow">DAILY INTEREST</p><h2 id="trend-title">최근 7일의 관심</h2><p id="range" class="small muted">오늘을 포함한 일별 방문 횟수</p></div><button id="download" class="secondary" disabled>기록 내려받기</button></div>
+        <p id="insight" class="insight">기록을 불러오면 방문 흐름을 확인할 수 있습니다.</p>
+        <div id="chart" class="chart" aria-hidden="true"></div>
+        <details><summary>날짜별 숫자 자세히 보기</summary><table><caption class="small muted">최근 7일 방문 기록 · 오늘은 집계 중</caption><thead><tr><th scope="col">날짜</th><th scope="col">방문 횟수</th><th scope="col">상태</th></tr></thead><tbody id="daily-rows"></tbody></table></details>
+      </section>
+      <section class="guide panel" aria-labelledby="guide-title"><h2 id="guide-title">사장님, 숫자는 이렇게 읽어 주세요</h2>
+        <div class="guide-grid"><div><h3>방문 횟수 ≠ 사람 수 ≠ 예약 수</h3><p>가게의 출입문이 열린 횟수와 비슷합니다. 같은 사람이 다른 탭·기기로 오면 다시 셀 수 있고, 광고 차단이나 통신 오류로 빠질 수도 있습니다.</p></div><div><h3>홍보한 날과 다음 날을 함께 보세요</h3><p>사진이나 글을 올린 날짜를 적어 두고 방문 흐름과 비교해 보세요. 이 화면만으로 어디서 왔는지, 홍보 때문에 늘었는지, 예약했는지는 알 수 없습니다.</p></div></div>
+        <details><summary>집계 기준과 보안 안내</summary><p>날짜는 한국 시간으로 조회합니다. 기존 집계는 방문자 기기의 날짜를 사용하므로 해외 방문은 날짜 경계에 차이가 날 수 있습니다. 없는 기록을 0회로 만들지 않으며, 과거에 누락된 방문은 복원하지 않습니다. 월별·누적 기록은 따로 저장되어 일별 합계와 다를 수 있습니다.</p><p>이 암호 화면은 간단한 가림막이지, 금고 같은 서버 보안은 아닙니다. 예약자 이름·연락처 같은 개인정보를 이 페이지에 넣지 마세요. 화면 잠그기는 현재 화면을 닫는 기능입니다.</p></details>
+      </section>
+      <footer class="small muted">수북수북 · 운영을 위한 작은 기록장</footer>
     </div>
   </main>
-  <script src="./admin.js"></script>
+  <script type="module" src="./admin.js?v=2"></script>
 </body>
 </html>
