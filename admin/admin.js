@@ -19,13 +19,10 @@ async function login() {
     el('login-error').textContent = '암호가 틀렸습니다.';
     return;
   }
-  sessionStorage.setItem('sub00k-admin', pw); // page reload convenience
-  unlock(pw);
+  unlock();
 }
 
-function unlock(pw) {
-
-  NS = 'sub00k-' + pw.replace(/-/g, '').slice(0, 6) + '-v1';
+function unlock() {
 
   NS = atob('c3ViMDBrLXMyYWszcA=='); // base64 of the real namespace
   el('gate').style.display = 'none';
@@ -72,5 +69,5 @@ el('login-btn').addEventListener('click', login);
 el('pw').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 el('refresh').addEventListener('click', refresh);
 
-const saved = sessionStorage.getItem('sub00k-admin');
-if (saved) sha256(saved).then(h => { if (h === HASH) unlock(saved); });
+// Clear passwords retained by older versions. Require a fresh entry on reload.
+sessionStorage.removeItem('sub00k-admin');
